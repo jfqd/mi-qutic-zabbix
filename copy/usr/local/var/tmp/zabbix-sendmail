@@ -1,0 +1,7 @@
+#!/bin/bash
+
+to=$1
+subject=$2
+body=$3
+
+echo "$body" | /usr/bin/mail -s "$subject" $to

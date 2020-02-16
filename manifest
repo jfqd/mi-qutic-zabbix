@@ -1,0 +1,8 @@
+name="qutic-zabbix"
+organization="qutic development"
+brand="Instance"
+version="20180404.0"
+description="qutic zabbix image"
+homepage="https://github.com/jfqd/mi-qutic-zabbix"
+users="root admin"
+base="f4eb6ee6-c5a1-11e8-9e53-177841ca2537"

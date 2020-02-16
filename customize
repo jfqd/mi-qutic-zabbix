@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -o errexit
+
+export LC_ALL=en_US.utf8
+export LANGUAGE=en_US.utf8
+export LANG=en_US.utf8
+
+ZABBIX_VERSION="4.0"
+PROXYSQL_VERSION="2.0.8"
+
+echo "* Install zabbix"
+wget https://download.qutic.com/src/zabbix/zabbix-release_${ZABBIX_VERSION}-3+stretch_all.deb
+dpkg -i zabbix-release_4.0-3+stretch_all.deb
+apt-get -y update
+apt-get -y install zabbix-server-mysql zabbix-frontend-php zabbix-agent
+mv /usr/local/var/tmp/zabbix-sendmail /usr/lib/zabbix/alertscripts/zabbix-sendmail
+chmod +x /usr/lib/zabbix/alertscripts/zabbix-sendmail
+
+echo "* Activate apache modules and vhost"
+a2enmod ssl    || true
+mkdir -p /etc/apache2/ssl
+chmod 0750 /etc/apache2/ssl
+rm /etc/apache2/conf-available/zabbix.conf
+mv /usr/local/var/tmp/default-ssl.conf /etc/apache2/sites-enabled/default-ssl.conf
+
+echo "* Install proxysql"
+curl -LO https://download.qutic.com/src/proxysql/proxysql_${PROXYSQL_VERSION}-debian9_amd64.deb
+dpkg -i proxysql_${PROXYSQL_VERSION}-debian9_amd64.deb
+mv /etc/proxysql.cnf /etc/proxysql.cnf.bak
+mv /usr/local/var/tmp/proxysql.cnf /etc/proxysql.cnf
+chmod 0640 /etc/proxysql.cnf
+chown root:proxysql /etc/proxysql.cnf
+chown -R proxysql:proxysql /var/lib/proxysql
+mv /usr/local/var/tmp/proxysql.service /etc/systemd/system/multi-user.target.wants/proxysql.service
+systemctl daemon-reload
+
+echo "* Ensure bootstrap will run next time"
+rm -rf /var/lib/bootstrap
+
+echo "* Cleaning up."
+# apt-get -y purge git make gcc g++ build-essential
+rm -rf /usr/local/var/tmp/*
+history -c
