@@ -11,7 +11,7 @@ PROXYSQL_VERSION="2.0.8"
 
 echo "* Install zabbix"
 wget https://download.qutic.com/src/zabbix/zabbix-release_${ZABBIX_VERSION}-3+stretch_all.deb
-dpkg -i zabbix-release_4.0-3+stretch_all.deb
+dpkg -i zabbix-release_${ZABBIX_VERSION}-3+stretch_all.deb
 apt-get -y update
 apt-get -y install zabbix-server-mysql zabbix-frontend-php zabbix-agent
 mv /usr/local/var/tmp/zabbix-sendmail /usr/lib/zabbix/alertscripts/zabbix-sendmail
