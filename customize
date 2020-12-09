@@ -19,6 +19,7 @@ chmod +x /usr/lib/zabbix/alertscripts/zabbix-sendmail
 
 echo "* Activate apache modules and vhost"
 a2enmod ssl    || true
+a2enmod rewrite || true
 mkdir -p /etc/apache2/ssl
 chmod 0750 /etc/apache2/ssl
 rm /etc/apache2/conf-available/zabbix.conf
