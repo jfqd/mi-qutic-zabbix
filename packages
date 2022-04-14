@@ -4,3 +4,4 @@ traceroute
 nmap
 snmp
 dnsutils
+ldnsutils
