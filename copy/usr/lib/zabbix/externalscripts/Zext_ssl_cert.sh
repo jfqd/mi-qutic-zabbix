@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #------------------------------------------------------------
 # zext_ssl_cert.sh
 # Script checks for number of days until certificate expires or the issuing authority
@@ -7,6 +7,7 @@
 #Based on script from aperto.fr (http://aperto.fr/cms/en/blog/15-blog-en/15-ssl-certificate-expiration-monitoring-with-zabbix.html)
 #with additions by racooper@tamu.edu
 #------------------------------------------------------------
+set -o pipefail
 
 DEBUG=0
 if [ $DEBUG -gt 0 ]

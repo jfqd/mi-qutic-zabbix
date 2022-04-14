@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+set -o pipefail
+
 if test -z "$1" ; then
   echo "You need to supply a DOMAIN to check. Quitting"
   exit 0;
