@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+# ruby remove_old_partitions 2023 > remove_old_partitions.sql
+# mysql --force zabbix < remove_old_partitions.sql
+
+if ARGV.size != 1
+  puts "USAGE: remove_old_partitions [year]"
+  exit 1
+end
+
+year  = ARGV.shift
+month = Array(1..12)
+day   = Array(1..31)
+
+y = year.to_i
+month.each do |m|
+  m = ("0#{m}")[-2..-1]
+    day.each do |d|
+      d = ("0#{d}")[-2..-1]
+      puts "ALTER TABLE history      DROP PARTITION p#{y}_#{m}_#{d};"
+      puts "ALTER TABLE history_log  DROP PARTITION p#{y}_#{m}_#{d};"
+      puts "ALTER TABLE history_str  DROP PARTITION p#{y}_#{m}_#{d};"
+      puts "ALTER TABLE history_text DROP PARTITION p#{y}_#{m}_#{d};"
+      puts "ALTER TABLE history_uint DROP PARTITION p#{y}_#{m}_#{d};"
+    end
+  puts "ALTER TABLE trends       DROP PARTITION p#{y}_#{m};"
+  puts "ALTER TABLE trends__uint DROP PARTITION p#{y}_#{m};"    
+end
+
