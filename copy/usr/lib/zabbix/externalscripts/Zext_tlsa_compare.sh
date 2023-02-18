@@ -20,11 +20,11 @@ DOMAIN=$1
 SUBDOMAIN=$2
 PORT=$3
 
-SHOULD=$(ldns-dane -d create ${DOMAIN} 443 | awk '{ print $8 }' | tr '[:lower:]' '[:upper:]')
-REAL=$(dig +short TLSA _${PORT}._tcp.${SUBDOMAIN}.${DOMAIN} | awk '{ print $4$5 }' | tr '[:lower:]' '[:upper:]')
+SHOULD=$(ldns-dane -d create ${DOMAIN} 443 2>/dev/null | awk '{ print $8 }' | tr '[:lower:]' '[:upper:]')
+REAL=$(dig -4 +short TLSA _${PORT}._tcp.${SUBDOMAIN}.${DOMAIN} | awk '{ print $4$5 }' | tr '[:lower:]' '[:upper:]')
 
 EXIT=0
-if [ "${SHOULD}" = "${REAL}" ]; then
+if [[ $(echo ${REAL} | grep -c "${SHOULD}") > 0 ]]; then
   echo "OK"
 else
   echo "${SHOULD}"
